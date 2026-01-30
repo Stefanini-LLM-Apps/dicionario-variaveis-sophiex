@@ -1,10 +1,220 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Meu site</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dicionário de Dados SophieX</title>
+    <meta name="description" content="Documentação técnica da API Rest SophieX Voz">
+    
+    <style>
+        /* * =========================================
+         * DESIGN TOKENS (Configurações Globais)
+         * =========================================
+         */
+        :root {
+            /* Paleta de Cores */
+            --color-bg: #f8f9fa;
+            --color-surface: #ffffff;
+            --color-text-primary: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-primary: #2563eb; /* Azul SophieX */
+            --color-border: #e2e8f0;
+            --color-stripe: #f1f5f9;
+            
+            /* Badges (Tipos de dados) */
+            --badge-bg: #e0e7ff;
+            --badge-text: #3730a3;
+
+            /* Tipografia */
+            --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+            /* Espaçamento */
+            --spacing-container: 1200px;
+            --spacing-md: 1.5rem;
+            --radius: 8px;
+        }
+
+        /* Reset Básico */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        /* * =========================================
+         * LAYOUT & TIPOGRAFIA
+         * =========================================
+         */
+        .container {
+            max-width: var(--spacing-container);
+            margin: 0 auto;
+            background: var(--color-surface);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header { margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; }
+
+        h1 { font-size: 2rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 0.5rem; }
+        
+        .description { color: var(--color-text-secondary); font-size: 1.1rem; max-width: 800px; }
+
+        /* * =========================================
+         * TABELA DE DADOS
+         * =========================================
+         */
+        
+        /* Wrapper para responsividade (Scroll horizontal em mobile) */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 600px; /* Garante leitura mínima antes do scroll */
+        }
+
+        /* Cabeçalho da Tabela */
+        thead { background-color: var(--color-bg); }
+        
+        th {
+            padding: 1rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        /* Corpo da Tabela */
+        td { padding: 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+
+        /* Efeito Zebrado e Hover */
+        tbody tr:nth-child(even) { background-color: var(--color-stripe); }
+        tbody tr:hover { background-color: #eef2ff; transition: background 0.2s; }
+
+        /* Estilização Específica das Colunas */
+        
+        /* 1. Nome da Variável (Code style) */
+        td:first-child {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* 2. Tipo de Dado (Badge visual) */
+        .type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            text-transform: lowercase;
+            font-family: var(--font-mono);
+        }
+
+        /* Remove borda da última linha */
+        tbody tr:last-child td { border-bottom: none; }
+
+    </style>
 </head>
 <body>
-<h1>Hello GitHub Pages 🚀</h1>
+
+    <main class="container">
+        <header>
+            <h1>Dicionário de Dados SophieX</h1>
+            <p class="description">
+                Documentação oficial do dicionário de dados da SophieX Voz. 
+                Estes dados estão estruturados e disponíveis para envio através da API Rest.
+            </p>
+        </header>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" width="25%">Nome da Variável</th>
+                        <th scope="col" width="15%">Tipo</th>
+                        <th scope="col">Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AnsweredBy</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Teste</td>
+                    </tr>
+                    <tr>
+                        <td>lastTranslatedUserInput</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Última informação dita pelo usuário traduzida, antes do fim da ligação.</td>
+                    </tr>
+                    <tr>
+                        <td>lastUserInput</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Última informação dita pelo usuário antes do fim da ligação.</td>
+                    </tr>
+                    <tr>
+                        <td>latest20Messages</td>
+                        <td><span class="type-badge">Array Strings</span></td>
+                        <td>Últimas vinte mensagens trocadas entre o Usuário e a Sophie antes do fim da ligação.</td>
+                    </tr>
+                    <tr>
+                        <td>callId</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>String de Identificação da ligação em Sophie.</td>
+                    </tr>
+                    <tr>
+                        <td>Ticket</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>String de Identificação da ligação em Sophie.</td>
+                    </tr>
+                    <tr>
+                        <td>SessionId</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>String de Identificação da ligação em Sophie.</td>
+                    </tr>
+                    <tr>
+                        <td>GenesysCloudConversationId</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>ID da ligação em Genesys.</td>
+                    </tr>
+                    <tr>
+                        <td>StartedAt</td>
+                        <td><span class="type-badge">ISO Date</span></td>
+                        <td>Data e Horário do inicio da ligação em Sophie.</td>
+                    </tr>
+                    <tr>
+                        <td>Language</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Idioma da ligação.</td>
+                    </tr>
+                    <tr>
+                        <td>To</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Number configurado dentro da Sophie.</td>
+                    </tr>
+                    <tr>
+                        <td>From</td>
+                        <td><span class="type-badge">String</span></td>
+                        <td>Número de origem da ligação.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
 </body>
 </html>
