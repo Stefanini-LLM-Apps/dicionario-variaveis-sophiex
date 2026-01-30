@@ -8,34 +8,31 @@
     
     <style>
         /* * =========================================
-         * DESIGN TOKENS (Configurações Globais)
+         * DESIGN TOKENS
          * =========================================
          */
         :root {
-            /* Paleta de Cores */
             --color-bg: #f8f9fa;
             --color-surface: #ffffff;
             --color-text-primary: #1e293b;
             --color-text-secondary: #64748b;
-            --color-primary: #2563eb; /* Azul SophieX */
+            --color-primary: #2563eb;
             --color-border: #e2e8f0;
-            --color-stripe: #f1f5f9;
+            --color-stripe: #f8fafc; /* Stripe mais sutil */
             
-            /* Badges (Tipos de dados) */
             --badge-bg: #e0e7ff;
             --badge-text: #3730a3;
 
-            /* Tipografia */
+            --code-bg: #1e293b; /* Fundo escuro para o JSON */
+            --code-text: #e2e8f0;
+
             --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 
-            /* Espaçamento */
             --spacing-container: 1200px;
-            --spacing-md: 1.5rem;
             --radius: 8px;
         }
 
-        /* Reset Básico */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -46,10 +43,6 @@
             padding: 2rem 1rem;
         }
 
-        /* * =========================================
-         * LAYOUT & TIPOGRAFIA
-         * =========================================
-         */
         .container {
             max-width: var(--spacing-container);
             margin: 0 auto;
@@ -60,17 +53,13 @@
         }
 
         header { margin-bottom: 2rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1.5rem; }
-
         h1 { font-size: 2rem; font-weight: 700; color: var(--color-text-primary); margin-bottom: 0.5rem; }
-        
         .description { color: var(--color-text-secondary); font-size: 1.1rem; max-width: 800px; }
 
         /* * =========================================
-         * TABELA DE DADOS
+         * TABELA & SPOILERS
          * =========================================
          */
-        
-        /* Wrapper para responsividade (Scroll horizontal em mobile) */
         .table-responsive {
             overflow-x: auto;
             border-radius: var(--radius);
@@ -81,10 +70,9 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 600px; /* Garante leitura mínima antes do scroll */
+            min-width: 600px;
         }
 
-        /* Cabeçalho da Tabela */
         thead { background-color: var(--color-bg); }
         
         th {
@@ -96,23 +84,42 @@
             border-bottom: 2px solid var(--color-border);
         }
 
-        /* Corpo da Tabela */
-        td { padding: 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+        td { padding: 1rem; vertical-align: top; }
 
-        /* Efeito Zebrado e Hover */
-        tbody tr:nth-child(even) { background-color: var(--color-stripe); }
-        tbody tr:hover { background-color: #eef2ff; transition: background 0.2s; }
-
-        /* Estilização Específica das Colunas */
+        /* ESTRATÉGIA DE LINHAS CONECTADAS 
+           A linha 'main-row' e 'spoiler-row' funcionam como um par.
+        */
         
-        /* 1. Nome da Variável (Code style) */
-        td:first-child {
+        /* Linha Principal: Remove a borda inferior para conectar com o spoiler */
+        tr.main-row td {
+            border-bottom: none;
+            padding-bottom: 0.5rem; /* Reduz espaço inferior */
+        }
+
+        /* Linha do Spoiler: É aqui que a borda acontece */
+        tr.spoiler-row td {
+            border-bottom: 1px solid var(--color-border);
+            padding-top: 0; /* Cola na linha de cima */
+            padding-bottom: 1.5rem;
+        }
+
+        /* Hover apenas no par (Visual) */
+        tbody tr.main-row:hover,
+        tbody tr.main-row:hover + tr.spoiler-row {
+            background-color: #f1f5f9;
+        }
+        tbody tr.spoiler-row:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Coluna Variável */
+        .var-name {
             font-family: var(--font-mono);
             font-weight: 600;
             color: var(--color-primary);
         }
 
-        /* 2. Tipo de Dado (Badge visual) */
+        /* Badges */
         .type-badge {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -125,8 +132,59 @@
             font-family: var(--font-mono);
         }
 
-        /* Remove borda da última linha */
-        tbody tr:last-child td { border-bottom: none; }
+        /* ESTILO DO SPOILER (<details>)
+        */
+        details {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        summary {
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.85rem;
+            user-select: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        summary:hover { color: var(--color-primary); }
+
+        /* Animação suave no conteúdo do spoiler */
+        details[open] .spoiler-content {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* Caixa de código/exemplo */
+        .spoiler-content {
+            margin-top: 0.75rem;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid #334155;
+        }
+
+        /* Pequeno indicador de "Exemplo" */
+        .example-label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
     </style>
 </head>
@@ -151,66 +209,199 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>AnsweredBy</td>
-                        <td><span class="type-badge">String</span></td>
-                        <td>Agente que está respondendo a chamada durante a ligação através da SophieX.</td>
-                        <pre>
-                          <code>
-                              Respondido por: Sophie
-                          </code>
-                        </pre>
-                    </tr>
-                    <tr>
-                        <td>Message</td>
+                    <tr class="main-row">
+                        <td class="var-name">Message</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Histórico da conversa entre usuário e Sophie durante a ligação.</td>
                     </tr>
-                    <tr>
-                        <td>lastUserInput</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "Message from System at 01/30/2026 19:17:28
+
+                                    Original Content: Olá! Bem vindo ao atendimento da Sophie
+
+                                    Content in Agent's Language: Oi Marcos Castanhola ! I'm Glô , "sua" virtual assistant. I'm on a learning journey. for us to understand each other well, please speak slowly, avoid noisy places and be objective. For your safety, this call is being recorded. Come on, tell me how I can help you today?
+
+
+                                    Message from Notification at 01/30/2026 19:17:29
+
+                                    Content: 
+
+
+                                    Message from Notification at 01/30/2026 19:17:29
+
+                                    Content: 
+
+
+                                    Message from Caller at 01/30/2026 19:18:00
+
+                                    Original Content: Eu quero dar entrada no meu reembolso de material escolar, mas não estou conseguindo aqui pelo site.
+
+                                    Content in Agent's Language: I want to submit my request for a school supplies refund, but I'm not able to do it here on the website.
+
+                                    Content in Caller's Language: Eu quero dar entrada no meu reembolso de material escolar, mas não estou conseguindo aqui pelo site."
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">lastUserInput</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Última informação dita pelo usuário antes do fim da ligação.</td>
                     </tr>
-                    <tr>
-                        <td>latest20Messages</td>
-                        <td><span class="type-badge">Array Strings</span></td>
-                        <td>Últimas vinte mensagens trocadas entre o Usuário e a Sophie antes do fim da ligação.</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "Eu gostaria de receber o boleto por email"
+                                </div>
+                            </details>
+                        </td>
                     </tr>
-                    <tr>
-                        <td>callId</td>
+
+                    <tr class="main-row">
+                        <td class="var-name">latest20Messages</td>
+                        <td><span class="type-badge">Array Strings</span></td>
+                        <td>Últimas vinte mensagens trocadas entre o Usuário e a Sophie.</td>
+                    </tr>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "[{"role":"ai","message"...}]"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">callId</td>
                         <td><span class="type-badge">String</span></td>
                         <td>String de Identificação da ligação em Sophie.</td>
                     </tr>
-                    <tr>
-                        <td>Ticket</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "550e8400-e29b-41d4-a716-446655440000"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">Ticket</td>
                         <td><span class="type-badge">String</span></td>
                         <td>String de Identificação do ticket criado em ITSMs não customizados.</td>
                     </tr>
-                    <tr>
-                        <td>GenesysCloudConversationId</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "INC-2023-998877"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">GenesysCloudConversationId</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Identificação da ligação em Genesys.</td>
                     </tr>
-                    <tr>
-                        <td>StartedAt</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "a1b2c3d4-e5f6-7890-1234-56789abcdef0"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">StartedAt</td>
                         <td><span class="type-badge">ISO Date</span></td>
                         <td>Data e Horário do inicio da ligação em Sophie.</td>
                     </tr>
-                    <tr>
-                        <td>Language</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "2023-10-27T14:30:00.000Z"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">Language</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Idioma da ligação.</td>
                     </tr>
-                    <tr>
-                        <td>To</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "Portuguese"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">To</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Number configurado dentro da Sophie.</td>
                     </tr>
-                    <tr>
-                        <td>From</td>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "STSD-LATAM-AtendimentoSophieX-Portuguese"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
+                    <tr class="main-row">
+                        <td class="var-name">From</td>
                         <td><span class="type-badge">String</span></td>
                         <td>Número de origem da ligação.</td>
                     </tr>
+                    <tr class="spoiler-row">
+                        <td colspan="3">
+                            <details>
+                                <summary>Ver exemplo de dado</summary>
+                                <div class="spoiler-content">
+                                    <span class="example-label">Exemplo</span>
+                                    "+5511888888888"
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
